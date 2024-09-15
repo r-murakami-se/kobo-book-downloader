@@ -4,6 +4,8 @@ from Kobo import Kobo, KoboException
 from LogFormatter import LogFormatter
 from Settings import Settings
 
+import os
+
 import colorama
 import requests
 
@@ -72,6 +74,8 @@ def Main() -> None:
 	pickParser.add_argument( "OutputPath", metavar = "output-path", help = "Output path must be an existing directory" )
 	pickParser.add_argument( "--all", default = False, action = "store_true", help = "List read books too" )
 	wishListParser = subparsers.add_parser( "wishlist", help = "List your wish listed books" )
+	infoParser = subparsers.add_parser( "login", help = "Create the configuration file" )
+	infoParser = subparsers.add_parser( "logout", help = "Delete the configuration file" )
 	arguments = argumentParser.parse_args()
 
 	if arguments.VerboseLogging:
@@ -81,6 +85,12 @@ def Main() -> None:
 		Commands.ShowUsage()
 	elif arguments.Command == "info":
 		Commands.Info()
+	elif arguments.Command == "login":
+		InitializeKoboApi()
+		print("Logged in!")
+	elif arguments.Command == "logout":
+		os.remove(Globals.Settings.SettingsFilePath)
+		print("Logged out!")
 	else:
 		InitializeKoboApi()
 
